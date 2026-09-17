@@ -4,15 +4,14 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const requireAuth = require('./middleware/requireAuth');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 const port = process.env.PORT || 3001;
 
-app.get('/', (req, res) => {
-  res.send('AI Capsule API is running');
-});
+
 
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok' });
@@ -205,6 +204,18 @@ app.get('/api/health', (req, res) => {
     db.prepare('DELETE FROM capsules WHERE id = ? AND user_id = ?').run(req.params.id,req.user.userId);
     res.json({ status: 'deleted', id: Number(req.params.id) });
   });  
+
+  const clientDist = path.join(__dirname, '..', 'client', 'dist');
+app.use(express.static(clientDist));
+
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api') || req.path.startsWith('/auth')) {
+    return next();
+  }
+  res.sendFile(path.join(clientDist, 'index.html'), (err) => {
+    if (err) next(err);
+  });
+});
 
 app.listen(port, () => {
   console.log(`API listening on http://localhost:${port}`);

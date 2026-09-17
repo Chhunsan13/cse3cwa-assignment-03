@@ -7,7 +7,8 @@
     "start": "node server/index.js",
     "dev:api": "node --watch server/index.js",
     "dev:web": "npm --prefix client run dev",
-    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev:api\" \"npm run dev:web\""
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev:api\" \"npm run dev:web\"",
+    "build": "npm --prefix client install && npm --prefix client run build"
   },
   "repository": {
     "type": "git",
