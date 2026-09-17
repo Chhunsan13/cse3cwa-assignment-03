@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
+import Header from '../components/Header.jsx'
 
 const emptyForm = {
   project_name: '',
@@ -84,17 +84,22 @@ export default function Dashboard() {
   }
 
   return (
-    <main>
-      <p>
-        <Link to="/">Home</Link>
-      </p>
-      <h1>Your capsules</h1>
-      {error ? <p>{error}</p> : null}
+    <div className="shell">
+      <Header />
+      <main>
+        <div className="page-head">
+          <div>
+            <p className="kicker">Protected dashboard</p>
+            <h1 className="page-title">Your capsules</h1>
+            <p className="muted">Only records owned by your GitHub account are shown.</p>
+          </div>
+        </div>
 
-      <form onSubmit={handleSubmit}>
-        <h2>{editingId ? 'Update capsule' : 'Create capsule'}</h2>
-        <p>
-          <label>
+        {error ? <p className="error">{error}</p> : null}
+
+        <form className="card form-grid" onSubmit={handleSubmit}>
+          <h2 className="wide">{editingId ? 'Update capsule' : 'Create capsule'}</h2>
+          <label className="field">
             Project name
             <input
               value={form.project_name}
@@ -102,9 +107,7 @@ export default function Dashboard() {
               required
             />
           </label>
-        </p>
-        <p>
-          <label>
+          <label className="field">
             Prompt title
             <input
               value={form.prompt_title}
@@ -112,37 +115,14 @@ export default function Dashboard() {
               required
             />
           </label>
-        </p>
-        <p>
-          <label>
+          <label className="field">
             Version
             <input
               value={form.prompt_version}
               onChange={(e) => updateField('prompt_version', e.target.value)}
             />
           </label>
-        </p>
-        <p>
-          <label>
-            Prompt text
-            <textarea
-              value={form.prompt_text}
-              onChange={(e) => updateField('prompt_text', e.target.value)}
-              required
-            />
-          </label>
-        </p>
-        <p>
-          <label>
-            Response summary
-            <textarea
-              value={form.response_summary}
-              onChange={(e) => updateField('response_summary', e.target.value)}
-            />
-          </label>
-        </p>
-        <p>
-          <label>
+          <label className="field">
             Category
             <select
               value={form.category}
@@ -153,9 +133,22 @@ export default function Dashboard() {
               <option>Research</option>
             </select>
           </label>
-        </p>
-        <p>
-          <label>
+          <label className="field wide">
+            Prompt text
+            <textarea
+              value={form.prompt_text}
+              onChange={(e) => updateField('prompt_text', e.target.value)}
+              required
+            />
+          </label>
+          <label className="field wide">
+            Response summary
+            <textarea
+              value={form.response_summary}
+              onChange={(e) => updateField('response_summary', e.target.value)}
+            />
+          </label>
+          <label className="field">
             Usefulness
             <select
               value={form.usefulness}
@@ -165,51 +158,59 @@ export default function Dashboard() {
               <option>Needs Improvement</option>
             </select>
           </label>
-        </p>
-        <p>
-          <label>
+          <label className="field wide">
             Notes
             <textarea
               value={form.notes}
               onChange={(e) => updateField('notes', e.target.value)}
             />
           </label>
-        </p>
-        <button type="submit">{editingId ? 'Save changes' : 'Create'}</button>
-        {editingId ? (
-          <button
-            type="button"
-            onClick={() => {
-              setEditingId(null)
-              setForm(emptyForm)
-            }}
-          >
-            Cancel
-          </button>
-        ) : null}
-      </form>
+          <div className="form-actions">
+            <button className="btn btn-primary" type="submit">
+              {editingId ? 'Save changes' : 'Create'}
+            </button>
+            {editingId ? (
+              <button
+                className="btn btn-ghost"
+                type="button"
+                onClick={() => {
+                  setEditingId(null)
+                  setForm(emptyForm)
+                }}
+              >
+                Cancel
+              </button>
+            ) : null}
+          </div>
+        </form>
 
-      <section>
-        {capsules.length === 0 ? (
-          <p>No prompts saved yet.</p>
-        ) : (
-          capsules.map((capsule) => (
-            <article key={capsule.id}>
-              <h3>{capsule.prompt_title}</h3>
-              <p>
-                {capsule.project_name} · {capsule.prompt_version} · {capsule.category}
-              </p>
-              <p>{capsule.prompt_text}</p>
-              <button type="button" onClick={() => startEdit(capsule)}>
-                Edit
-              </button>
-              <button type="button" onClick={() => handleDelete(capsule.id)}>
-                Delete
-              </button>
-            </article>
-          ))
-        )}
-      </section>
-    </main>
+        <section className="capsule-list">
+          {capsules.length === 0 ? (
+            <div className="card empty">No prompts saved yet. Create one above.</div>
+          ) : (
+            capsules.map((capsule) => (
+              <article className="card capsule-card" key={capsule.id}>
+                <p className="meta">
+                  {capsule.project_name} · {capsule.prompt_version} · {capsule.category}
+                </p>
+                <h3>{capsule.prompt_title}</h3>
+                <p className="prompt-text">{capsule.prompt_text}</p>
+                {capsule.response_summary ? (
+                  <p className="muted">{capsule.response_summary}</p>
+                ) : null}
+                <div className="form-actions">
+                  <button className="btn btn-ghost" type="button" onClick={() => startEdit(capsule)}>
+                    Edit
+                  </button>
+                  <button className="btn btn-danger" type="button" onClick={() => handleDelete(capsule.id)}>
+                    Delete
+                  </button>
+                </div>
+              </article>
+            ))
+          )}
+        </section>
+      </main>
+    </div>
   )
 }
