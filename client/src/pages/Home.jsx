@@ -10,6 +10,7 @@ export default function Home() {
       </p>
       <p>
         <Link to="/login">Sign in</Link>
+        <Link to="/dashboard">Dashboard</Link>
       </p>
     </main>
   )
