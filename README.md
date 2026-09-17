@@ -10,7 +10,26 @@ A private prompt library for CSE3CWA / CSE5006 Assignment 3. After GitHub OAuth,
 
 ## Install and run locally
 
-Requires Node.js 18+ and a GitHub OAuth App.
+Requires Node.js 18+ and a GitHub OAuth App. The same npm commands work on **Linux (Ubuntu)** and macOS. The deployed app already runs on Linux (Render).
+
+### Ubuntu / Linux
+
+Install Node and the compiler tools `better-sqlite3` needs:
+
+```bash
+sudo apt update
+sudo apt install -y nodejs npm build-essential
+node -v
+```
+
+`node -v` must be **v18 or newer**. If Ubuntu’s default Node is too old:
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+### Run the app (Linux and macOS)
 
 ```bash
 cp .env.example .env
@@ -18,6 +37,8 @@ npm install
 npm --prefix client install
 npm run dev
 ```
+
+Fill in `.env` (GitHub OAuth values and `JWT_SECRET`). Do not commit that file.
 
 - Frontend: http://localhost:5173
 - API: http://localhost:3001
