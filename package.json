@@ -13,7 +13,6 @@
     "type": "git",
     "url": "git+https://github.com/Chhunsan13/cse3cwa-assignment-03.git"
   },
-  
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -23,6 +22,7 @@
   },
   "homepage": "https://github.com/Chhunsan13/cse3cwa-assignment-03#readme",
   "dependencies": {
+    "better-sqlite3": "^13.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1"
   },
@@ -30,4 +30,3 @@
     "concurrently": "^10.0.5"
   }
 }
-
