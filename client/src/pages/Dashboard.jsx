@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+
 
 const emptyForm = {
   project_name: '',
@@ -13,15 +14,20 @@ const emptyForm = {
 }
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const [capsules, setCapsules] = useState([])
   const [form, setForm] = useState(emptyForm)
   const [editingId, setEditingId] = useState(null)
   const [error, setError] = useState('')
 
   async function load() {
-    const res = await fetch('/api/capsules')
+    const res = await fetch('/api/capsules', { credentials: 'include' })
+    if (res.status === 401) {
+      navigate('/login')
+      return
+    }
     const data = await res.json()
-    setCapsules(data)
+    setCapsules(Array.isArray(data) ? data : [])
   }
 
   useEffect(() => {
@@ -41,6 +47,7 @@ export default function Dashboard() {
 
     const res = await fetch(url, {
       method,
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form),
     })
@@ -72,7 +79,7 @@ export default function Dashboard() {
 
   async function handleDelete(id) {
     if (!window.confirm('Delete this capsule?')) return
-    await fetch(`/api/capsules/${id}`, { method: 'DELETE' })
+    await fetch(`/api/capsules/${id}`, { method: 'DELETE', credentials: 'include' })
     await load()
   }
 
